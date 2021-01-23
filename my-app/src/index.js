@@ -1,3 +1,6 @@
+// TODO: #2 Share app via Netlify
+// TODO: #3 Update readme.md
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
