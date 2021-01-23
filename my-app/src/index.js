@@ -3,34 +3,63 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 // Renders a button
-class Square extends React.Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: null,
-        };
-    }
-
-    render() {
-        return (
-            <button 
-            className="square"
-            onClick={() => this.setState({value: 'X'})}>
-                {this.state.value}
-            </button>
-        );
-    }
+function Square(props) {
+    return (
+        // Board passes onClick={() => this.handleClick(i)} to square.
+        <button className="square" onClick={props.onClick}>
+            {props.value}
+        </button>
+    )
 }
   
 // Renders the board with nine squares
 class Board extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        // Stores the state of all child components (squares)
+        // When the board state changes, the square components re-render automatically.
+        /*
+            'O', null, 'X',
+            'X', 'X', 'O',
+            'O', null, null,
+        */
+        this.state = {
+            // Create an array with nine items with the value null
+            squares: Array(9).fill(null),
+
+            // X is starting
+            xIsNext: true,
+        };
+    }
+    
+    handleClick(i) {
+        // Creates a copy (slice) of squares array to modify instead of the existing array.
+        // Keeps immutability
+        const squares = this.state.squares.slice();
+
+        // Flips X and O
+        squares[i] = this.state.xIsNext ? 'X' : 'O';        
+
+        this.setState({
+            squares: squares,
+            xIsNext: !this.state.xIsNext, // set xIsNext to opposite
+        });
+    }
+
     renderSquare(i) {
-        return <Square value={i} />;
+        // Takes value (i) from the square array.
+        return (
+            <Square
+                value={this.state.squares[i]}
+                onClick={() => this.handleClick(i)}
+            />
+        );
     }
   
     render() {
-        const status = 'Next player: X';
+        // Next player based on xIsNext
+        const status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
   
         return (
             <div>
@@ -70,9 +99,7 @@ class Game extends React.Component {
             </div>
         );
     }
-}
-  
-// ========================================
+}  
   
 ReactDOM.render(
     <Game />,
