@@ -116,9 +116,13 @@ class Game extends React.Component {
     }
 
     jumpTo(step) {
+        console.log("step: " + step);
+       
         this.setState({
-            stepNumber: step,
 
+            buttonColor: "red",
+
+            stepNumber: step,
             // If stepNumber is even, then xIsNext is set to true
             xIsNext: (step % 2) === 0,
         });
@@ -140,21 +144,33 @@ class Game extends React.Component {
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
         
+
+
+        
+
         /*
-            "moves" is an object with elements
+            "moves" is an object with elements thats rendered each time a button is clicked.
+            
             Map calls function on all elements in history.
             
             "move" serves as key for history
         */
         const moves = history.map((step, move) => {
 
+            // Highlights the current botton
+            let currentButton = (move === this.state.stepNumber ? 'currentButton' : '')
+
             // Move starts at 0, so it is false, and desc will be "Go to game start" else "Go to move # 1..."
             const desc = move ?
                 'Go to move # ' + move :
                 'Go to game start';                
+            
             return (                               
                 <li key={move}>
-                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                    <button 
+                        className={currentButton}
+                        onClick={() => this.jumpTo(move)}>{desc}
+                    </button>
                 </li>
             );
         });

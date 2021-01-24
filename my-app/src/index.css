@@ -1,5 +1,3 @@
-/* TODO: #1 Spice up the design */
-
 body {
     font: 14px "Century Gothic", Futura, sans-serif;
     margin: 20px;
@@ -7,6 +5,10 @@ body {
   
   ol, ul {
     padding-left: 30px;
+  }
+
+  .selected-move {
+    font-weight: bold;
   }
   
   .board-row:after {
@@ -50,3 +52,8 @@ body {
   .game-info {
     margin-left: 20px;
   }  
+
+  .currentButton {   
+    color: white;
+    background-color: darkcyan;
+  }
