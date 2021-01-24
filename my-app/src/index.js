@@ -1,4 +1,3 @@
-// TODO: #2 Share app via Netlify
 // TODO: #3 Update readme.md
 // TODO: #4 Display the location for each move in the format (col, row) in the move history list.
 // TODO: #5 Bold the currently selected item in the move list.
@@ -19,9 +18,8 @@ function Square(props) {
             {props.value}
         </button>
     )
-}
-  
-// Renders the board with nine squares
+}  
+
 class Board extends React.Component {   
     renderSquare(i) {
         // Takes value (i) from the square array.
@@ -32,7 +30,8 @@ class Board extends React.Component {
             />
         );
     }
-  
+
+    // Renders the board with nine squares
     render() {
         return (
             <div>                
@@ -56,7 +55,7 @@ class Board extends React.Component {
     }
 }
   
-// Renders board with placeholder values
+// Renders board element with placeholder values
 class Game extends React.Component {
     constructor(props) {
         super(props);
@@ -68,6 +67,8 @@ class Game extends React.Component {
             'X', 'X', 'O',
             'O', null, null,
         */
+
+        // Initial state
         this.state = {
             history: [{
                 // Create an array with nine items with the value null
@@ -83,7 +84,7 @@ class Game extends React.Component {
     }
 
     handleClick(i) {
-        // If we "go back in time" and make a new move from that point, we now throw all the past future away
+        // If we "go back in time" and make a new move from that point, we then throw all the past future away
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
 
@@ -91,20 +92,26 @@ class Game extends React.Component {
         // Keeps immutability
         const squares = current.squares.slice();
         
-        // ignore click, if somehone has won or if Square is already filled
+        // ignore click, if someone has won or if Square is already filled (starting with null, so false from start)
         if(calculateWinner(squares) || squares[i]) {
             return;
         }
 
-        // Flips X and O
-        squares[i] = this.state.xIsNext ? 'X' : 'O';        
-
+        // Flips X and O turn
+        squares[i] = this.state.xIsNext ? 'X' : 'O';   
+        
+        // Tells React that this component and its children need to be re-rendered with the updated state
         this.setState({
-            history: history.concat([{ // concat() doesn't mutate like push()
+            // Concat() doesn't mutate like push()
+            history: history.concat([{ 
                 squares: squares,
-            }]),        
-            stepNumber: history.length,    
-            xIsNext: !this.state.xIsNext, // set xIsNext to opposite
+            }]),
+
+            // Update stepnumber according to history length
+            stepNumber: history.length,   
+
+            // set xIsNext to opposite 
+            xIsNext: !this.state.xIsNext, 
         });
     }
 
@@ -118,16 +125,34 @@ class Game extends React.Component {
     }
     
     render() {
+        /*
+            "history" is an object with arrays as values
+                0: squares: [null, null, null, null, null, null, null, null, null]
+                1: squares: ["X", null, null, null, null, null, null, null, null]
+                2: squares: ["X", "O", null, null, null, null, null, null, null]
+        */
         const history = this.state.history;
+
+        /*
+            "current" is an object with the current array as value
+                1: squares: ["X", null, null, null, null, null, null, null, null]
+        */        
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
         
+        /*
+            "moves" is an object with elements
+            Map calls function on all elements in history.
+            
+            "move" serves as key for history
+        */
         const moves = history.map((step, move) => {
+
+            // Move starts at 0, so it is false, and desc will be "Go to game start" else "Go to move # 1..."
             const desc = move ?
                 'Go to move # ' + move :
-                'Go to game start';
-            return (
-                // "Move" serves as key for history
+                'Go to game start';                
+            return (                               
                 <li key={move}>
                     <button onClick={() => this.jumpTo(move)}>{desc}</button>
                 </li>
@@ -135,7 +160,6 @@ class Game extends React.Component {
         });
 
         let status;
-
         if(winner) {
             status = "Winner: " + winner;
         } else {
@@ -147,6 +171,8 @@ class Game extends React.Component {
                 <div className="game-board">
                     <Board 
                         squares={current.squares}
+
+                        // Board passes the function "handleClick(i) to Square, so Square calls that function when it's clicked"
                         onClick={(i) => this.handleClick(i)}
                     />
                 </div>
@@ -159,6 +185,7 @@ class Game extends React.Component {
     }
 }  
 
+// Renders a React element "Game" in the container 'root'
 ReactDOM.render(
     <Game />,
     document.getElementById('root')
