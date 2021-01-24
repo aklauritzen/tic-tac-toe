@@ -1,6 +1,5 @@
 // TODO: #3 Update readme.md
 // TODO: #4 Display the location for each move in the format (col, row) in the move history list.
-// TODO: #5 Bold the currently selected item in the move list.
 // TODO: #6 Rewrite Board to use two loops to make the squares instead of hardcoding them.
 // TODO: #7 Add a toggle button that lets you sort the moves in either ascending or descending order.
 // TODO: #8 When someone wins, highlight the three squares that caused the win.
