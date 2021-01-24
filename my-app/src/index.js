@@ -1,9 +1,7 @@
 // TODO: #3 Update readme.md
-// TODO: #4 Display the location for each move in the format (col, row) in the move history list.
 // TODO: #6 Rewrite Board to use two loops to make the squares instead of hardcoding them.
 // TODO: #7 Add a toggle button that lets you sort the moves in either ascending or descending order.
 // TODO: #8 When someone wins, highlight the three squares that caused the win.
-// TODO: #9 When no one wins, display a message about the result being a draw.
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -66,12 +64,16 @@ class Game extends React.Component {
             'X', 'X', 'O',
             'O', null, null,
         */
-
+       
         // Initial state
         this.state = {
-            history: [{
+            history: [{            
                 // Create an array with nine items with the value null
-            squares: Array(9).fill(null)
+                squares: Array(9).fill(null), 
+                
+                // Default col and row
+                col: null,
+                row: null
             }],          
 
             // Indicate what step we are currently viewing
@@ -90,8 +92,11 @@ class Game extends React.Component {
         // Creates a copy (slice) of squares array to modify instead of the existing array
         // Keeps immutability
         const squares = current.squares.slice();
-        
-        // ignore click, if someone has won or if Square is already filled (starting with null, so false from start)
+              
+        // Finds row and col from i
+        const rowAndCol = findRowAndCol(i)
+
+        // Ignore click, if someone has won or if Square is already filled (starting with null, so false from start)
         if(calculateWinner(squares) || squares[i]) {
             return;
         }
@@ -101,26 +106,24 @@ class Game extends React.Component {
         
         // Tells React that this component and its children need to be re-rendered with the updated state
         this.setState({
+
             // Concat() doesn't mutate like push()
             history: history.concat([{ 
                 squares: squares,
+                row: rowAndCol[0],
+                col: rowAndCol[1],
             }]),
 
             // Update stepnumber according to history length
             stepNumber: history.length,   
-
+            
             // set xIsNext to opposite 
             xIsNext: !this.state.xIsNext, 
         });
     }
 
-    jumpTo(step) {
-        console.log("step: " + step);
-       
+    jumpTo(step) {       
         this.setState({
-
-            buttonColor: "red",
-
             stepNumber: step,
             // If stepNumber is even, then xIsNext is set to true
             xIsNext: (step % 2) === 0,
@@ -130,22 +133,26 @@ class Game extends React.Component {
     render() {
         /*
             "history" is an object with arrays as values
-                0: squares: [null, null, null, null, null, null, null, null, null]
-                1: squares: ["X", null, null, null, null, null, null, null, null]
-                2: squares: ["X", "O", null, null, null, null, null, null, null]
+                0:  squares: [null, null, null, null, null, null, null, null, null]
+                    col: null
+                    row: null
+                1:  squares: ["X", null, null, null, null, null, null, null, null]
+                    col: 1
+                    row: 1
+                2:  squares: ["X", "O", null, null, null, null, null, null, null]
+                    col: 2
+                    row: 1
         */
         const history = this.state.history;
 
         /*
             "current" is an object with the current array as value
-                1: squares: ["X", null, null, null, null, null, null, null, null]
+                1:  squares: ["X", null, null, null, null, null, null, null, null]
+                    col: 1
+                    row: 1
         */        
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
-        
-
-
-        
 
         /*
             "moves" is an object with elements thats rendered each time a button is clicked.
@@ -155,25 +162,30 @@ class Game extends React.Component {
             "move" serves as key for history
         */
         const moves = history.map((step, move) => {
+            
+            // Step is the current object
+                // step.col, step.row, step.
 
             // Highlights the current botton
             let currentButton = (move === this.state.stepNumber ? 'currentButton' : '')
 
-            // Move starts at 0, so it is false, and desc will be "Go to game start" else "Go to move # 1..."
-            const desc = move ?
-                'Go to move # ' + move :
+            // Move starts at 0, so it is false, and desc will be "Go to game start" else "Go to move # 1..."            
+            const description = move ?
+                'Go to move # ' + move + " at col: " + step.col + " row: " + step.row :
                 'Go to game start';                
             
             return (                               
                 <li key={move}>
                     <button 
                         className={currentButton}
-                        onClick={() => this.jumpTo(move)}>{desc}
+                        onClick={() => this.jumpTo(move)}>{description}
                     </button>
                 </li>
             );
         });
 
+        // TODO: #9 When no one wins, display a message about the result being a draw.
+        
         let status;
         if(winner) {
             status = "Winner: " + winner;
@@ -205,6 +217,56 @@ ReactDOM.render(
     <Game />,
     document.getElementById('root')
 );
+
+// TODO: Find a better solution to find Row and Col based on i. IF && ?
+function findRowAndCol(i) {
+    let row;
+    let col;
+
+    switch(i) {
+        case 0:
+        case 1:
+        case 2:
+            row = 1;
+            break;
+        case 3:
+        case 4:
+        case 5:
+            row = 2;            
+            break;
+        case 6:
+        case 7:
+        case 8:
+            row = 3;
+            break;
+        
+        default:
+            break;            
+    }
+
+    switch(i) {
+        case 0:
+        case 3:
+        case 6:
+            col = 1;
+            break;
+        case 1:
+        case 4:
+        case 7:
+            col = 2;
+            break;
+        case 2:
+        case 5:
+        case 8:
+            col = 3;
+            break;
+
+        default:
+            break;
+    }
+    
+    return [row, col];
+}
 
 function calculateWinner(squares) {
     const lines = [
