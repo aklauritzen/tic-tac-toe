@@ -171,7 +171,7 @@ class Game extends React.Component {
 
             // Move starts at 0, so it is false, and desc will be "Go to game start" else "Go to move # 1..."            
             const description = move ?
-                'Go to move # ' + move + " at col: " + step.col + " row: " + step.row :
+                'Go to move # ' + move + " at col # " + step.col + " row # " + step.row :
                 'Go to game start';                
             
             return (                               
@@ -184,8 +184,7 @@ class Game extends React.Component {
             );
         });
 
-        // TODO: #9 When no one wins, display a message about the result being a draw.
-        
+        // TODO: #9 When no one wins, display a message about the result being a draw.        
         let status;
         if(winner) {
             status = "Winner: " + winner;
@@ -218,53 +217,21 @@ ReactDOM.render(
     document.getElementById('root')
 );
 
-// TODO: Find a better solution to find Row and Col based on i. IF && ?
+// Returns row and col num
 function findRowAndCol(i) {
     let row;
     let col;
-
-    switch(i) {
-        case 0:
-        case 1:
-        case 2:
-            row = 1;
-            break;
-        case 3:
-        case 4:
-        case 5:
-            row = 2;            
-            break;
-        case 6:
-        case 7:
-        case 8:
-            row = 3;
-            break;
-        
-        default:
-            break;            
-    }
-
-    switch(i) {
-        case 0:
-        case 3:
-        case 6:
-            col = 1;
-            break;
-        case 1:
-        case 4:
-        case 7:
-            col = 2;
-            break;
-        case 2:
-        case 5:
-        case 8:
-            col = 3;
-            break;
-
-        default:
-            break;
-    }
+  
+    // Find row
+    if(i < 3) { row = 1 };
+    if(i > 2 && i < 6) { row = 2 };
+    if(i > 5) { row = 3 };  
     
+    // Find col
+    if(i === 0 || i === 3 || i === 6) { col = 1 };
+    if(i === 1 || i === 4 || i === 7) { col = 2 };
+    if(i === 2 || i === 5 || i === 8) { col = 3 };
+
     return [row, col];
 }
 
