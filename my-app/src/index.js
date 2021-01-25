@@ -1,6 +1,5 @@
 // TODO: #3 Update readme.md
 // TODO: #6 Rewrite Board to use two loops to make the squares instead of hardcoding them.
-// TODO: #7 Add a toggle button that lets you sort the moves in either ascending or descending order.
 // TODO: #8 When someone wins, highlight the three squares that caused the win.
 
 import React from 'react';
@@ -81,10 +80,13 @@ class Game extends React.Component {
 
             // X is starting
             xIsNext: true,
+
+            // Sort direction ("asc" / "desc")
+            nextSortDirection: "desc",
         };
     }
 
-    handleClick(i) {
+    handleSquareClick(i) {
         // If we "go back in time" and make a new move from that point, we then throw all the past future away
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         const current = history[history.length - 1];
@@ -130,6 +132,14 @@ class Game extends React.Component {
         });
     }
     
+    changeSortDirection() {
+        //  Flip asc / desc 
+        const direction = (this.state.nextSortDirection === "desc") ? "asc" : "desc";
+        this.setState({
+            nextSortDirection: direction,
+        })
+    }
+    
     render() {
         /*
             "history" is an object with arrays as values
@@ -144,7 +154,8 @@ class Game extends React.Component {
                     row: 1
         */
         const history = this.state.history;
-
+              
+        
         /*
             "current" is an object with the current array as value
                 1:  squares: ["X", null, null, null, null, null, null, null, null]
@@ -162,7 +173,7 @@ class Game extends React.Component {
             "move" serves as key for history
         */
         const moves = history.map((step, move) => {
-            
+        
             // Step is the current object
                 // step.col, step.row, step.
 
@@ -184,6 +195,9 @@ class Game extends React.Component {
             );
         });
 
+        // Reversing moves
+        const reversedMoves = moves.slice().reverse()
+                
         // TODO: #9 When no one wins, display a message about the result being a draw.        
         let status;
         if(winner) {
@@ -199,12 +213,14 @@ class Game extends React.Component {
                         squares={current.squares}
 
                         // Board passes the function "handleClick(i) to Square, so Square calls that function when it's clicked"
-                        onClick={(i) => this.handleClick(i)}
+                        onClick={(i) => this.handleSquareClick(i)}
                     />
                 </div>
                 <div className="game-info">
                     <div>{status}</div>
-                    <ol>{moves}</ol>
+                    <button onClick={() => this.changeSortDirection()}>Change sorting to: {this.state.nextSortDirection}</button>
+
+                    <ul>{((this.state.nextSortDirection === "desc") ? moves : reversedMoves)}</ul>
                 </div>
             </div>
         );
@@ -235,7 +251,7 @@ function findRowAndCol(i) {
     return [row, col];
 }
 
-function calculateWinner(squares) {
+function calculateWinner(squares) {   
     const lines = [
         [0, 1, 2],
         [3, 4, 5],
@@ -246,9 +262,12 @@ function calculateWinner(squares) {
         [0, 4, 8],
         [2, 4, 6],
     ];
-    for (let i = 0; i < lines.length; i++) {
-        const [a, b, c] = lines[i];
-        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+    for (let i = 0; i < lines.length; i++) {        
+        const [a, b, c] = lines[i];        
+                
+        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {      
+
+            // Returns winner: X / O
             return squares[a];
         }
     }
