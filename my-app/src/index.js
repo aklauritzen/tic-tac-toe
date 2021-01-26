@@ -1,6 +1,6 @@
 // TODO: #3 Update readme.md
-// TODO: #6 Rewrite Board to use two loops to make the squares instead of hardcoding them.
 // TODO: #8 When someone wins, highlight the three squares that caused the win.
+// TODO: #16 Restart game button
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -26,29 +26,26 @@ class Board extends React.Component {
             />
         );
     }
-
-    // Renders the board with nine squares
+    
+    // Renders the board with nine squares    
     render() {
+        const squares = [];
+        let totalCol = 0;        
+        for(let row = 0; row < 3; row++) {            
+            const boardRow = [];
+            for(let col = 0; col < 3; col++) {                
+                boardRow.push(<span key={totalCol}>{this.renderSquare(totalCol)}</span>)
+                totalCol++;
+            }
+            squares.push(<div key={row} className="board-row">{boardRow}</div>)
+        };
+
         return (
-            <div>                
-                <div className="board-row">
-                    {this.renderSquare(0)}
-                    {this.renderSquare(1)}
-                    {this.renderSquare(2)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(3)}
-                    {this.renderSquare(4)}
-                    {this.renderSquare(5)}
-                </div>
-                <div className="board-row">
-                    {this.renderSquare(6)}
-                    {this.renderSquare(7)}
-                    {this.renderSquare(8)}
-                </div>
+            <div>
+                {squares}
             </div>
         );
-    }
+    };    
 }
   
 // Renders board element with placeholder values
