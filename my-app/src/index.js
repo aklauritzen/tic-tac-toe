@@ -179,16 +179,16 @@ class Game extends React.Component {
 
             // Move starts at 0, so it is false, and desc will be "Go to game start" else "Go to move # 1..."            
             const description = move ?
-                'Go to move # ' + move + " at col # " + step.col + " row # " + step.row :
+                'Go to move # ' + move + " (col " + step.col + " / row " + step.row + ")":
                 'Go to game start';                
             
             return (                               
-                <li key={move}>
+                <div key={move}>
                     <button 
                         className={currentButton}
                         onClick={() => this.jumpTo(move)}>{description}
                     </button>
-                </li>
+                </div>
             );
         });
 
@@ -214,10 +214,9 @@ class Game extends React.Component {
                     />
                 </div>
                 <div className="game-info">
-                    <div>{status}</div>
-                    <button onClick={() => this.changeSortDirection()}>Change sorting to: {this.state.nextSortDirection}</button>
-
-                    <ul>{((this.state.nextSortDirection === "desc") ? moves : reversedMoves)}</ul>
+                    <div className="status-text">{status}</div>
+                    <button className="direction-button" onClick={() => this.changeSortDirection()}>Change sorting to: {this.state.nextSortDirection}</button>
+                    <div className="step-buttons">{((this.state.nextSortDirection === "desc") ? moves : reversedMoves)}</div>
                 </div>
             </div>
         );

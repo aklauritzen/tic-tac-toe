@@ -1,6 +1,10 @@
+/* Drawed font for X and O*/
+@import url('https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap');
+
 body {
-    font: 14px "Century Gothic", Futura, sans-serif;
-    margin: 20px;
+    font-family: 'Gochi Hand', cursive;
+    display: flex; 
+    justify-content: center;       
   }
   
   ol, ul {
@@ -25,15 +29,16 @@ body {
     background: #fff;
     border: 1px solid #999;
     float: left;
-    font-size: 34px;
+    font-family: 'Gochi Hand', cursive; 
+    font-size: 75px;
     font-weight: bold;
     line-height: 34px;
-    height: 70px;
+    height: 100px;
     margin-right: -1px;
     margin-top: -1px;
     padding: 0;
     text-align: center;
-    width: 70px;
+    width: 100px;
   }
   
   .square:focus {
@@ -44,14 +49,25 @@ body {
     background: #ddd;
   }
   
-  .game {
-    display: flex;
-    flex-direction: row;
-  }
-  
   .game-info {
-    margin-left: 20px;
+     display: flex;
+     flex-direction: column;
+     text-align: center;
   }  
+
+  .step-buttons {
+    position: relative;
+    line-height: 30px;
+    top: 20px;
+  }
+
+  .status-text {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    flex-direction: column;
+    font-size: 40px;    
+  }
 
   .currentButton {   
     color: white;
