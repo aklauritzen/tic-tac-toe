@@ -98,7 +98,7 @@ class Game extends React.Component {
         // Ignore click, if someone has won or if Square is already filled (starting with null, so false from start)
         if(calculateWinner(squares) || squares[i]) {
             return;
-        }
+        }        
 
         // Flips X and O turn
         squares[i] = this.state.xIsNext ? 'X' : 'O';   
@@ -160,7 +160,7 @@ class Game extends React.Component {
                     row: 1
         */        
         const current = history[this.state.stepNumber];
-        const winner = calculateWinner(current.squares);
+        const winnerOrTie = calculateWinner(current.squares, this.state.stepNumber);
 
         /*
             "moves" is an object with elements thats rendered each time a button is clicked.
@@ -194,11 +194,10 @@ class Game extends React.Component {
 
         // Reversing moves
         const reversedMoves = moves.slice().reverse()
-                
-        // TODO: #9 When no one wins, display a message about the result being a draw.        
+                            
         let status;
-        if(winner) {
-            status = "Winner: " + winner;
+        if(winnerOrTie) {
+            status = winnerOrTie;
         } else {
             // Next player based on xIsNext
             status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
@@ -248,7 +247,7 @@ function findRowAndCol(i) {
     return [row, col];
 }
 
-function calculateWinner(squares) {   
+function calculateWinner(squares, step) {   
     const lines = [
         [0, 1, 2],
         [3, 4, 5],
@@ -265,8 +264,14 @@ function calculateWinner(squares) {
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {      
 
             // Returns winner: X / O
-            return squares[a];
+            return "Winner is " + squares[a];
         }
     }
+
+    // If it is a tie
+    if(step === 9) {
+        return "It is a tie";
+    }
+
     return null;
 } 
