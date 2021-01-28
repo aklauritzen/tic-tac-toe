@@ -136,6 +136,13 @@ class Game extends React.Component {
             nextSortDirection: direction,
         })
     }
+
+    restartGame() {
+        console.log("restart game");
+     
+        // TODO: Find a way to reset the this.state. Maybe save the initial values, and recall them on click?
+
+    }
     
     render() {
         /*
@@ -214,7 +221,10 @@ class Game extends React.Component {
                 </div>
                 <div className="game-info">
                     <div className="status-text">{status}</div>
-                    <button className="direction-button" onClick={() => this.changeSortDirection()}>Change sorting to: {this.state.nextSortDirection}</button>
+                    <div className="game-info-navigation">
+                        <button onClick={() => this.changeSortDirection()}>Change sorting to: {this.state.nextSortDirection}</button>
+                        <button onClick={() => this.restartGame()}>Restart game</button>
+                    </div>
                     <div className="step-buttons">{((this.state.nextSortDirection === "desc") ? moves : reversedMoves)}</div>
                 </div>
             </div>
@@ -263,13 +273,13 @@ function calculateWinner(squares, step) {
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {      
 
             // Returns winner: X / O
-            return "Winner is " + squares[a];
+            return squares[a] + " is the Winner";
         }
     }
 
     // If it is a tie
     if(step === 9) {
-        return "It is a tie";
+        return "IT'S A TIE";
     }
 
     return null;
