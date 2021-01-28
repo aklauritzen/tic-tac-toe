@@ -53,7 +53,15 @@ body {
      display: flex;
      flex-direction: column;
      text-align: center;
+     padding-top: 20px;
+     
   }  
+
+  .game-info-navigation {
+    display: flex;
+    column-gap: 5px;
+    justify-content: space-evenly;
+  }
 
   .step-buttons {
     position: relative;
