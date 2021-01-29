@@ -1,6 +1,5 @@
 // TODO: #3 Update readme.md
 // TODO: #8 When someone wins, highlight the three squares that caused the win.
-// TODO: #16 Restart game button
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -47,40 +46,48 @@ class Board extends React.Component {
         );
     };    
 }
-  
+
+// Stores the state of all child components (squares)
+// When the board state changes, the square components re-render automatically.
+/*
+    'O', null, 'X',
+    'X', 'X', 'O',
+    'O', null, null,
+*/
+
+// The state is stores a seperate variable. It makes it possible to reset the initial state
+const initialState = {
+    history: [{            
+        // Create an array with nine items with the value null
+        squares: Array(9).fill(null), 
+        
+        // Default col and row
+        col: null,
+        row: null
+    }],          
+
+    // Indicate what step we are currently viewing
+    stepNumber: 0,
+
+    // X is starting
+    xIsNext: true,
+
+    // Sort direction ("asc" / "desc")
+    nextSortDirection: "desc",
+}
+
+
 // Renders board element with placeholder values
 class Game extends React.Component {
     constructor(props) {
         super(props);
-        
-        // Stores the state of all child components (squares)
-        // When the board state changes, the square components re-render automatically.
-        /*
-            'O', null, 'X',
-            'X', 'X', 'O',
-            'O', null, null,
-        */
        
-        // Initial state
-        this.state = {
-            history: [{            
-                // Create an array with nine items with the value null
-                squares: Array(9).fill(null), 
-                
-                // Default col and row
-                col: null,
-                row: null
-            }],          
+        this.state = initialState;
+    }
 
-            // Indicate what step we are currently viewing
-            stepNumber: 0,
-
-            // X is starting
-            xIsNext: true,
-
-            // Sort direction ("asc" / "desc")
-            nextSortDirection: "desc",
-        };
+    // Reset initial state
+    reset() {
+        this.setState(initialState);
     }
 
     handleSquareClick(i) {
@@ -138,10 +145,7 @@ class Game extends React.Component {
     }
 
     restartGame() {
-        console.log("restart game");
-     
-        // TODO: Find a way to reset the this.state. Maybe save the initial values, and recall them on click?
-
+        this.reset();        
     }
     
     render() {
@@ -157,8 +161,7 @@ class Game extends React.Component {
                     col: 2
                     row: 1
         */
-        const history = this.state.history;
-              
+        const history = this.state.history;              
         
         /*
             "current" is an object with the current array as value
@@ -170,16 +173,13 @@ class Game extends React.Component {
         const winnerOrTie = calculateWinner(current.squares, this.state.stepNumber);
 
         /*
-            "moves" is an object with elements thats rendered each time a button is clicked.
-            
-            Map calls function on all elements in history.
-            
+            "moves" is an object with elements thats rendered each time a button is clicked.            
+            Map calls function on all elements in history.            
             "move" serves as key for history
         */
-        const moves = history.map((step, move) => {
-        
+        const moves = history.map((step, move) => {        
             // Step is the current object
-                // step.col, step.row, step.
+            // step.col, step.row, step.
 
             // Highlights the current botton
             let currentButton = (move === this.state.stepNumber ? 'currentButton' : '')
@@ -199,7 +199,7 @@ class Game extends React.Component {
             );
         });
 
-        // Reversing moves
+        // Reverse moves
         const reversedMoves = moves.slice().reverse()
                             
         let status;
