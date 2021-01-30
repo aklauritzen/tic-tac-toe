@@ -3,8 +3,6 @@ Live demo: https://tic-tac-toe-aklauritzen.netlify.app
 
 Classic Tic Tac Toe build with React.
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/aa3cee76-4ef8-4899-8922-54e4f260cbda/deploy-status)](https://app.netlify.com/sites/tic-tac-toe-aklauritzen/deploys)
-
 ## Concept
 * Lets you play tic-tac-toe,
 * Indicates when a player has won the game,
