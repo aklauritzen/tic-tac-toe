@@ -1,27 +1,27 @@
 // TODO: #3 Update readme.md
-// TODO: #8 When someone wins, highlight the three squares that caused the win.
+// TODO: #24 Add minor rotation to X and O to make it more "realistic"
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
 // Renders a button
-function Square(props) {
+function Square(props) {    
     return (
-        // Board passes onClick={() => this.handleClick(i)} to square.
+        // Board passes onClick={() => this.handleClick(i)} to square.        
         <button className="square" onClick={props.onClick}>
             {props.value}
         </button>
     )
 }  
 
-class Board extends React.Component {   
-    renderSquare(i) {
+class Board extends React.Component {       
+    renderSquare(i) {        
         // Takes value (i) from the square array.
         return (
             <Square
                 value={this.props.squares[i]}
-                onClick={() => this.props.onClick(i)}
+                onClick={() => this.props.onClick(i)}                
             />
         );
     }
@@ -69,7 +69,7 @@ const initialState = {
     // Indicate what step we are currently viewing
     stepNumber: 0,
 
-    // X is starting
+    // X is the starting player
     xIsNext: true,
 
     // Sort direction ("asc" / "desc")
@@ -80,8 +80,7 @@ const initialState = {
 // Renders board element with placeholder values
 class Game extends React.Component {
     constructor(props) {
-        super(props);
-       
+        super(props);       
         this.state = initialState;
     }
 
@@ -89,7 +88,7 @@ class Game extends React.Component {
     reset() {
         this.setState(initialState);
     }
-
+    
     handleSquareClick(i) {
         // If we "go back in time" and make a new move from that point, we then throw all the past future away
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
@@ -171,7 +170,22 @@ class Game extends React.Component {
         */        
         const current = history[this.state.stepNumber];
         const winnerOrTie = calculateWinner(current.squares, this.state.stepNumber);
+        
 
+        // TODO: #8 When someone wins, highlight the three squares that caused the win.
+        // Highlight winner combination based on "winnerOrTie[1]" -> [a, b, c]
+        if(winnerOrTie) {
+            console.log(current.squares[0]);
+
+            // Learn: How to "reach" squares by number? (Use CSS .square.highlight to highligt the squares)
+
+            /*
+            console.log("Winner combination")
+            winnerOrTie.forEach(square => console.log(square))
+            */
+            
+        }
+        
         /*
             "moves" is an object with elements thats rendered each time a button is clicked.            
             Map calls function on all elements in history.            
@@ -201,10 +215,10 @@ class Game extends React.Component {
 
         // Reverse moves
         const reversedMoves = moves.slice().reverse()
-                            
+
         let status;
         if(winnerOrTie) {
-            status = winnerOrTie;
+            status = winnerOrTie[0] + " is the Winner";
         } else {
             // Next player based on xIsNext
             status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
@@ -269,15 +283,15 @@ function calculateWinner(squares, step) {
     ];
     for (let i = 0; i < lines.length; i++) {        
         const [a, b, c] = lines[i];        
-                
+        
         if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {      
-
-            // Returns winner: X / O
-            return squares[a] + " is the Winner";
+            
+            // Returns winner: X / O and the winner combination
+            return [squares[a], [a, b, c]];
         }
     }
 
-    // If it is a tie
+    // If all nine steps are completet, and no one wins, then it is a tie
     if(step === 9) {
         return "IT'S A TIE";
     }

@@ -40,6 +40,10 @@ body {
     text-align: center;
     width: 100px;
   }
+
+  .square.highlight {
+    color: red;
+  }
   
   .square:focus {
     outline: none;
@@ -48,13 +52,12 @@ body {
   .kbd-navigation .square:focus {
     background: #ddd;
   }
-  
+
   .game-info {
      display: flex;
      flex-direction: column;
      text-align: center;
-     padding-top: 20px;
-     
+     padding-top: 20px;     
   }  
 
   .game-info-navigation {
@@ -80,4 +83,4 @@ body {
   .currentButton {   
     color: white;
     background-color: darkcyan;
-  }
+  } 
