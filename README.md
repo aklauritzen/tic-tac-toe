@@ -15,6 +15,7 @@ The project is inspired by React Tutorial: https://reactjs.org/tutorial/tutorial
 
 ## I have added new features to the game
 * Toggle button to sort move history
+* Restart game button
 * Added 2 x loops to create the square board (instead of hardcoding the board)
 * Highlight selected move in the history list
 * History item now shows move position (col/row)
